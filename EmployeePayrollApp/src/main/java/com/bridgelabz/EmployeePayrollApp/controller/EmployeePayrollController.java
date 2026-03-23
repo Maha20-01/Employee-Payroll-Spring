@@ -1,34 +1,42 @@
 package com.bridgelabz.EmployeePayrollApp.controller;
 
 import com.bridgelabz.EmployeePayrollApp.dto.EmployeeDTO;
+import com.bridgelabz.EmployeePayrollApp.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;  // ✅ ADD THIS
 
 @RestController
 @RequestMapping("/employeepayrollservice")
 public class EmployeePayrollController {
 
-    @GetMapping("/")
-    public String getAll() {
-        return "Employee Payroll App is running";
-    }
+    @Autowired
+    EmployeeService service;
 
-    @GetMapping("/get/{id}")
-    public String getById(@PathVariable int id) {
-        return "Employee ID: " + id;
+    @GetMapping("/")
+    public List<EmployeeDTO> getAll() {
+        return service.getAll();
     }
 
     @PostMapping("/create")
-    public String create(@RequestBody EmployeeDTO emp) {
-        return "Created: " + emp.name + " Salary: " + emp.salary;
+    public EmployeeDTO create(@RequestBody EmployeeDTO dto) {
+        return service.create(dto);
+    }
+
+    @GetMapping("/get/{id}")
+    public EmployeeDTO getById(@PathVariable int id) {
+        return service.getById(id);
     }
 
     @PutMapping("/update/{id}")
-    public String update(@PathVariable int id, @RequestBody EmployeeDTO emp) {
-        return "Updated ID: " + id;
+    public EmployeeDTO update(@PathVariable int id, @RequestBody EmployeeDTO dto) {
+        return service.update(id, dto);
     }
 
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable int id) {
-        return "Deleted ID: " + id;
+        service.delete(id);
+        return "Deleted";
     }
 }
